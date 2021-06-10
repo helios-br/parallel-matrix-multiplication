@@ -36,6 +36,7 @@ build: compile
 	@echo "echo" >> $(RUN)
 	@echo "rm log.txt" >> $(RUN)
 	@echo "cd output" >> $(RUN)
+	# @echo "valgrind --tool=cachegrind ./$(APPLICATION_NAME) $$""1" "&> ../log.txt" >> $(RUN)
 	@echo "./$(APPLICATION_NAME) $$""1" "&> ../log.txt" >> $(RUN)
 	@echo "echo" >> $(RUN)
 	@echo "echo -e '# Done!'" >> $(RUN)
