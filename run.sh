@@ -3,7 +3,7 @@ echo -e 'Running application...'
 echo
 rm log.txt
 cd output
-valgrind --tool=cachegrind ./parallel-matrix-app $1 &> ../log.txt
+./parallel-matrix-app $1 &> ../log.txt
 echo
 echo -e '# Done!'
 echo

@@ -13,7 +13,7 @@ void executeAnalysis(InstanceData instanceData)
 {
 	// Execution
 
-	int initialK = 1;
+	int initialK = 5;
 
 	vector<int> orders;
 	vector<float> timesScenario1;
@@ -54,7 +54,7 @@ void executeAnalysis(InstanceData instanceData)
 
 			// Execution
 
-			vector<vector<double>> resultMatrixDouble(matrixOrder, vector<double>(matrixOrder));			
+			vector<vector<double>> resultMatrixDouble(matrixOrder, vector<double>(matrixOrder));
 
 			for (int i = 0; i < matrixOrder; i++)
 				for (int j = 0; j < matrixOrder; j++)
@@ -96,7 +96,6 @@ void executeAnalysis(InstanceData instanceData)
 			 * Scenario 3: loop inversion
 			 */
 
-
 			startTime = std::chrono::high_resolution_clock::now();
 
 			// Execution
@@ -120,32 +119,32 @@ void executeAnalysis(InstanceData instanceData)
 			 * Scenario 4: blocking
 			 */
 
-			/* startTime = std::chrono::high_resolution_clock::now();
+			startTime = std::chrono::high_resolution_clock::now();
 
 			// Execution
 
 			vector<vector<int>> resultMatrix4(matrixOrder, vector<int>(matrixOrder));
 			int bsize = 64;
 
-			for (int kk = 0; kk < matrixOrder; kk += bsize)
+			for (int jj = 0; jj < matrixOrder; jj += bsize)
 			{
-				for (int jj = 0; jj < matrixOrder; jj += bsize)
+				for (int kk = 0; kk < matrixOrder; kk += bsize)
 				{
 					for (int i = 0; i < matrixOrder; i++)
 					{
-						int kkEdge = kk + bsize - 1;
-						if (matrixOrder < kkEdge)
+						int jEdge = jj + bsize - 1;
+						if (matrixOrder < jEdge)
 						{
-							kkEdge = matrixOrder;
+							jEdge = matrixOrder;
 						}
-						for (int k = kk; k < kkEdge; k++)
+						for (int j = jj; j < jEdge; j++)
 						{
-							int jjEdge = jjEdge + bsize - 1;
-							if (matrixOrder < jjEdge)
+							int kEdge = kk + bsize - 1;
+							if (matrixOrder < kEdge)
 							{
-								jjEdge = matrixOrder;
+								kEdge = matrixOrder;
 							}
-							for (int j = jj; j < jjEdge; j++)
+							for (int k = kk; k < kEdge; k++)
 							{
 								resultMatrix4[i][j] += matrixA[i][k] * matrixB[k][j];
 							}
@@ -160,7 +159,8 @@ void executeAnalysis(InstanceData instanceData)
 			duration = (std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count());
 			time = (float)duration / 1000000;
 			processingTimesScenario4 += time;
-			cout << "Scenario 4 [" << n << "]: " << time << " seconds" << endl; */
+			cout << "Scenario 4 [" << n << "]: " << time << " seconds" << endl;
+			//printMatrix(resultMatrix4, matrixOrder);
 
 			/**
 			 * Scenario 5: parallel
@@ -196,7 +196,7 @@ void executeAnalysis(InstanceData instanceData)
 
 	// Output results
 
-	cout << endl;
+	/* cout << endl;
 	cout << "---- Processing times ----" << endl;
 	cout << std::fixed << std::setprecision(10);
 
@@ -207,8 +207,8 @@ void executeAnalysis(InstanceData instanceData)
 		cout << "Scenario 1: " << timesScenario1[index] << " seconds" << endl;
 		cout << "Scenario 2: " << timesScenario2[index] << " seconds" << endl;
 		cout << "Scenario 3: " << timesScenario3[index] << " seconds" << endl;
-		//cout << "Scenario 4: " << timesScenario4[index] << " seconds" << endl;
-	}
+		cout << "Scenario 4: " << timesScenario4[index] << " seconds" << endl;
+	} */
 
 	cout << "Done!" << endl;
 
@@ -226,7 +226,7 @@ void executeAnalysis(InstanceData instanceData)
 	g1.set_style("lines").plot_xy(orders, timesScenario2, "scenario 2");
 	g1.set_style("").plot_xy(orders, timesScenario3, "scenario 3");
 	g1.set_style("lines").plot_xy(orders, timesScenario3, "scenario 3");
-	//g1.set_style("").plot_xy(orders, timesScenario4, "scenario 4");
-	//g1.set_style("lines").plot_xy(orders, timesScenario4, "scenario 4");
+	g1.set_style("").plot_xy(orders, timesScenario4, "scenario 4");
+	g1.set_style("lines").plot_xy(orders, timesScenario4, "scenario 4");
 	waitForKey();
 }
