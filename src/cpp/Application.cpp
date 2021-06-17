@@ -2,6 +2,7 @@
 #include "InstanceDataLoader.h"
 #include "InstanceData.h"
 #include "AlgorithmsAnalysis.h"
+#include "ParallelAnalysis.h"
 
 using namespace std;
 
@@ -15,5 +16,6 @@ int main(int argc, char **argv)
 
 	// Algorithms analysis
 
-	executeAnalysis(instanceData);
+	//executeAnalysis(instanceData);
+	executeParallelAnalysis(instanceData);
 }
