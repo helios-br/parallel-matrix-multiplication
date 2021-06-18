@@ -16,6 +16,6 @@ int main(int argc, char **argv)
 
 	// Algorithms analysis
 
-	//executeAnalysis(instanceData);
-	executeParallelAnalysis(instanceData);
+	executeAnalysis(instanceData);
+	//executeParallelAnalysis(instanceData);
 }

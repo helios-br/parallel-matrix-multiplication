@@ -5,7 +5,7 @@
 #include <math.h>
 #include <iomanip>
 #include "MatrixBuilder.h"
-//#include "GnuplotWrap.h"
+#include "GnuplotWrap.h"
 #include <vector>
 #include "StringUtil.h"
 #include <omp.h>
@@ -16,7 +16,7 @@ void executeAnalysis(InstanceData instanceData)
 {
 	// Execution
 
-	int initialP = 8;
+	int initialP = 1;
 
 	vector<int> orders;
 	vector<float> timesScenario1;
@@ -175,15 +175,15 @@ void executeAnalysis(InstanceData instanceData)
 			 * Scenario 5: parallel (blocking)
 			 */
 
-			bsize = 64;
 			startTime = high_resolution_clock::now();
 
 			// Execution
 
 			vector<vector<int>> resultMatrix5(matrixOrder, vector<int>(matrixOrder));
 
-			omp_set_num_threads(4);
-			#pragma omp parallel for private(i, j, k, jj, kk)
+			omp_set_num_threads(8);
+
+			#pragma omp parallel for private(i, j, k, kk) shared(jj)
 			for (jj = 0; jj < matrixOrder; jj += bsize)
 			{
 				int jEdge = jj + bsize;
@@ -201,7 +201,7 @@ void executeAnalysis(InstanceData instanceData)
 					}
 
 					for (i = 0; i < matrixOrder; i++)
-					{						
+					{
 						for (j = jj; j < jEdge; j++)
 						{
 							int value = 0; // GREAT IDEA (LESS INDEXATIONS)
@@ -274,7 +274,7 @@ void executeAnalysis(InstanceData instanceData)
 
 	// Gnuplot
 
-	/* Gnuplot g1("Results");
+	Gnuplot g1("Results");
 	g1.set_grid();
 	g1.set_xlabel("Matrix order");
 	g1.set_ylabel("Time (seconds)");
@@ -282,13 +282,13 @@ void executeAnalysis(InstanceData instanceData)
 	g1.set_xautoscale();
 	g1.set_style("").plot_xy(orders, timesScenario1, "scenario 1");
 	g1.set_style("lines").plot_xy(orders, timesScenario1, "scenario 1");
-	g1.set_style("").plot_xy(orders, timesScenario2, "scenario 2");
-	g1.set_style("lines").plot_xy(orders, timesScenario2, "scenario 2");
-	g1.set_style("").plot_xy(orders, timesScenario3, "scenario 3");
-	g1.set_style("lines").plot_xy(orders, timesScenario3, "scenario 3");
-	g1.set_style("").plot_xy(orders, timesScenario4, "scenario 4");
-	g1.set_style("lines").plot_xy(orders, timesScenario4, "scenario 4");
-	g1.set_style("").plot_xy(orders, timesScenario5, "scenario 5");
-	g1.set_style("lines").plot_xy(orders, timesScenario5, "scenario 5");
-	waitForKey(); */
+	g1.set_style("").plot_xy(orders, timesScenario2, "scenario 2 (double to int)");
+	g1.set_style("lines").plot_xy(orders, timesScenario2, "scenario 2 (double to int)");
+	g1.set_style("").plot_xy(orders, timesScenario3, "scenario 3 (loop inversion)");
+	g1.set_style("lines").plot_xy(orders, timesScenario3, "scenario 3 (loop inversion)");
+	g1.set_style("").plot_xy(orders, timesScenario4, "scenario 4 (blocking)");
+	g1.set_style("lines").plot_xy(orders, timesScenario4, "scenario 4 (blocking)");
+	g1.set_style("").plot_xy(orders, timesScenario5, "scenario 5 (parallel)");
+	g1.set_style("lines").plot_xy(orders, timesScenario5, "scenario 5 (parallel)");
+	waitForKey();
 }
